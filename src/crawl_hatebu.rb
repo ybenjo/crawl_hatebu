@@ -85,6 +85,6 @@ end
 
 if __FILE__ == $0
   c = Cralwer.new
-  c.crawl("2012-01-01", "2012-01-01")
+  c.crawl(ARGV[0], ARGV[1])
   c.write
 end

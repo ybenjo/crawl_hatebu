@@ -1,1 +1,1 @@
-crawl hatena bookmarf for detect spam.
+crawl hatena bookmark for detect spam.
