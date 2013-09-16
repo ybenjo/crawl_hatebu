@@ -17,18 +17,19 @@ class Cralwer
   end
 
   def get_entry(url)
-    info = { }
-    info[:url] = url
-    info[:ids] = [ ]
     target_url = @api_url + URI.escape(url)
     @log.info("Get #{url}.")
-
-    host = URI(url).host
-    info[:host] = host
-    info[:time] = Time.now
     
     begin
-      ret = JSON.parse(Net::HTTP.get(URI.parse(target_url), {'User-Agent' => UA}))
+      ret = JSON.parse(Net::HTTP.get(URI.parse(target_url)))
+      
+      info = { }
+      info[:url] = url
+      info[:ids] = [ ]
+      host = URI(url).host
+      info[:host] = host
+      info[:time] = Time.now
+
       info[:title] = ret['title']
       info[:count] = ret['count'].to_i
       info[:comments] = { }
@@ -44,6 +45,7 @@ class Cralwer
     rescue => e
       @log.error("Failed in #{url}.")
       @log.error(e.message)
+      return { }
     end
     sleep @wait
     info
@@ -75,7 +77,7 @@ class Cralwer
       urls = get_hotentry_list(date)
       urls.each do |url|
         info = get_entry(url)
-        save(info)
+        save(info) if !info.empty?
       end
     end
   end
