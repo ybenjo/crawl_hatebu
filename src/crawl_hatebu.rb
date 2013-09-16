@@ -42,8 +42,8 @@ class Cralwer
         info[:ids].push id
       end
     rescue => e
-      @log.error('Failed in #{url}.')
-      @log.error('#{e.message}')
+      @log.error("Failed in #{url}.")
+      @log.error(e.message)
     end
     sleep @wait
     info
@@ -89,6 +89,6 @@ end
 if __FILE__ == $0
   c = Cralwer.new
   c.crawl(ARGV[0], ARGV[1])
-  # p c.get_hotentry_list('20130101')
+  # p c.get_hotentry_list('20120101')
   # p c.get_entry('http://d.hatena.ne.jp/takeda25/20130914/1379166107')
 end
