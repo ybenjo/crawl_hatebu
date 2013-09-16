@@ -53,7 +53,7 @@ class Cralwer
     urls = [ ]
     @log.info("Get #{date}'s hotentries.")
     begin
-      doc = Nokogiri::HTML(open(@hotentry_url + date).read, 'User-Agent' => UA)
+      doc = Nokogiri::HTML(open(@hotentry_url + date, 'User-Agent' => UA).read)
       (doc/'h3.hb-entry-link-container'/'a').each do |elem|
         url = elem.attribute('href').value
         urls.push url
