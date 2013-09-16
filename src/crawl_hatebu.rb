@@ -7,6 +7,7 @@ require 'json/pure'
 require 'logger'
 require 'mongo'
 
+UA = 'crawler. mail_address ybenjo.repose at gmail'
 class Cralwer
   def initialize
     @hotentry_url = 'http://b.hatena.ne.jp/hotentry/'
@@ -27,7 +28,7 @@ class Cralwer
     info[:time] = Time.now
     
     begin
-      ret = JSON.parse(Net::HTTP.get(URI.parse(target_url)))
+      ret = JSON.parse(Net::HTTP.get(URI.parse(target_url), {'User-Agent' => UA}))
       info[:title] = ret['title']
       info[:count] = ret['count'].to_i
       info[:comments] = { }
@@ -44,7 +45,7 @@ class Cralwer
       @log.error('Failed in #{url}.')
       @log.error('#{e.message}')
     end
-    # sleep @wait
+    sleep @wait
     info
   end
   
@@ -52,10 +53,10 @@ class Cralwer
     urls = [ ]
     @log.info("Get #{date}'s hotentries.")
     begin
-      doc = Nokogiri::HTML(open(@hotentry_url + date).read)
+      doc = Nokogiri::HTML(open(@hotentry_url + date).read, 'User-Agent' => UA)
       (doc/'h3.hb-entry-link-container'/'a').each do |elem|
-          url = elem.attribute('href').value
-          urls.push url
+        url = elem.attribute('href').value
+        urls.push url
       end
 
     rescue => e
